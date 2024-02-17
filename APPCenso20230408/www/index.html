@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+		<link rel="icon" href="data:,">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>APP Pedidos</title>
+
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+        <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+        
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    </head>
+    <body>
+        <ion-app>
+            <ion-router id="ruteo" root="/">
+                <ion-route url="/" component="page-home"></ion-route>
+                <ion-route url="/personas" component="page-personas"></ion-route>
+                <ion-route url="/login" component="page-login"></ion-route>
+                <ion-route url="/registro" component="page-registro"></ion-route>
+                <ion-route url="/listadoPersonas" component="page-listadoPersonas"></ion-route>
+                <ion-route url="/filtroporOcupacion" component="page-filtroporOcupacion"></ion-route>
+                <ion-route url="/totalCensados" component="page-totalCensados"></ion-route>
+
+            </ion-router>
+            <ion-nav id="nav"></ion-nav>
+
+            <ion-menu side="start" menu-id="first" content-id="main" id="menu">
+                <ion-header>
+                  <ion-toolbar color="dark">
+                    <ion-title>Menú</ion-title>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-content>
+                  <ion-list>
+                    <ion-item id ="btnMenuPersonas" href="/personas" onclick="cerrarMenu()">Alta Persona</ion-item>
+                    <ion-item id="btnMenuIngreso" href="/login" onclick="cerrarMenu()">Login</ion-item>
+                    <ion-item id="btnMenuRegistro" href="/registro" onclick="cerrarMenu()">Registro</ion-item>
+                    <ion-item id="btnMenuListadoPersonas" href="/listadoPersonas" onclick="cerrarMenu()">Listado Personas</ion-item>
+                    <ion-item id="btnMenuFiltroporOcupacion" href="/filtroporOcupacion" onclick="cerrarMenu()">Filtro por Ocupación</ion-item>
+                    <ion-item id="btnMenuTotalCensados" href="/totalCensados" onclick="cerrarMenu()">Total Censados</ion-item>
+                    <ion-item id="btnMenuCerrarSesion" onclick="cerrarSesion()">Salir</ion-item>
+                  </ion-list>
+                </ion-content>
+            </ion-menu>
+            <div id="main"></div>
+    
+            <page-home class="ion-page" id="pantalla-home">
+            </page-home>
+    
+            <page-login class="ion-page" id="pantalla-login">
+                <ion-header>
+                    <ion-toolbar color="warning">
+                    <ion-buttons slot="start">
+                        <ion-menu-button></ion-menu-button>
+                    </ion-buttons>
+                    <ion-title>Login</ion-title>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content>            
+                    <br><br>
+                    <ion-list>
+                        <ion-item>
+                            <ion-input id="txtLoginUsuario" type="text" label="Usuario" value="jsoca" autocomplete="off" label-placement="floating"></ion-input>
+                        </ion-item>
+                        <br>
+                        <ion-item>
+                            <ion-input id="txtLoginPassword" type="password" label="Contraseña" value="jsoca1" autocomplete="off" label-placement="floating"></ion-input>
+                        </ion-item>
+                    </ion-list>
+                    <br>
+                    <ion-button id="btnLoginIngresar" expand="block" color="warning">Ingresar</ion-button>
+                    <br><br>
+                </ion-content>
+            </page-login>
+    
+            <!-- Alta de Personas Censadas -->
+            <page-personas class="ion-page" id="pantalla-personas">
+                <ion-header>
+                    <ion-toolbar color="warning">
+                    <ion-buttons slot="start">
+                        <ion-menu-button></ion-menu-button>
+                    </ion-buttons>
+                    <ion-title>Alta Personas</ion-title>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content>            
+                    <br><br>
+                    <ion-list>
+                        <ion-item>
+                            <ion-input id="txtRegistroNombre" type="text" label="Nombre: " label-placement="floating" required></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-input id="txtRegistroFechadeNacimiento" type="date" label="Fecha de Nacimiento: " label-placement="floating"></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-select id="pantalla-personas-combo-departamentos" placeholder="Seleccione Departamento">
+                            </ion-select>
+                        </ion-item>
+                        <ion-item>
+                            <ion-select id="pantalla-personas-combo-ciudades" placeholder="Seleccione Ciudad">
+                            </ion-select>
+                        </ion-item>
+                       
+                        <ion-item>
+                            <ion-select id="pantalla-departamentos-combo-ocupaciones" placeholder="Seleccione Ocupación">
+                            </ion-select>
+                        </ion-item>
+                    </ion-list>
+                    <br>
+                    <br>
+                        <!-- <div id="mapa-ciudades" style="height: 500px;"></div> -->
+                    
+                        <ion-button id="btnRegistroPersona" expand="block" color="warning">Ingresar</ion-button>
+                    <br><br>   
+                </ion-content>
+            </page-personas>    
+            <!-- Fin Alta de Personas Censadas -->
+
+           
+                <page-listadoPersonas class="ion-page" id="pantalla-listadoPersonas">
+                    <ion-header>
+                        <ion-toolbar color="warning">
+                          <ion-buttons slot="start">
+                            <ion-menu-button></ion-menu-button>
+                          </ion-buttons>
+                          <ion-title>Listado de Personas</ion-title>
+                        </ion-toolbar>
+                      </ion-header>
+                      
+                      <ion-content>
+                        <div id="datosPersonasCensadas">
+                          <!-- Aquí se mostrarán los datos de las personas censadas -->
+                        </div>
+                        
+                        <ion-list id="lista-personas">
+                          <ion-card class="persona-card" *ngFor="let persona of personas">
+                            <ion-card-content>
+                              <ion-card-title>{{ persona.nombre }}</ion-card-title>
+                              <ion-card-subtitle>Fecha de Nacimiento: {{ persona.fechaNacimiento }}</ion-card-subtitle>
+                              <ion-card-subtitle>Ocupación: {{ persona.ocupacion }}</ion-card-subtitle>
+                            </ion-card-content>
+                            <ion-button class="boton-eliminar" fill="clear" (click)="eliminarPersona(persona.idCenso)">
+                              <ion-icon name="trash-outline"></ion-icon>
+                            </ion-button>
+                          </ion-card>
+                        </ion-list>
+                      </ion-content>
+                      <ion-toast id="toast-confirmacion" message="Pesona eliminada correctamente" duration="3000"></ion-toast>
+
+                </page-listadoPersonas>
+
+                
+            <page-registro class="ion-page" id="pantalla-registro">
+                <ion-header>
+                    <ion-toolbar color="warning">
+                    <ion-buttons slot="start">
+                        <ion-menu-button></ion-menu-button>
+                    </ion-buttons>
+                    <ion-title>Registro</ion-title>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content>
+                    <ion-list>
+                        <ion-item>
+                            <ion-input id="txtRegistroUsuario" type="text" label="Usuario" label-placement="floating"></ion-input>
+                            </ion-item>
+                            <br>
+                            <ion-item>
+                            <ion-input id="txtRegistroPassword" type="password" label="Contraseña" label-placement="floating"></ion-input>
+                            </ion-item>
+                            <br>
+                            <ion-item>
+                            <ion-input id="txtRegistroVerificacionPassword" type="password" label="Repetir Contraseña" label-placement="floating"></ion-input>
+                            </ion-item>
+                    </ion-list>
+                    <br>
+                    <ion-button id="btnRegistroRegistrarse" expand="block" color="warning">Registrarse</ion-button>
+                    <br><br>
+                </ion-content>
+            </page-registro>
+            <!-- pantalla-filtroporocupacion -->
+            
+            <page-filtroporocupacion class="ion-page" id="pantalla-filtroporocupacion">
+                <ion-header>
+                    <ion-toolbar color="warning">
+                    <ion-buttons slot="start">
+                        <ion-menu-button></ion-menu-button>
+                    </ion-buttons>
+                    <ion-title>Filtro por Ocupacion</ion-title>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content>
+                    <ion-list>
+                        <ion-item>
+                            <ion-input id="txtIngresoOcupacion" type="text" label="Ingrese Ocuopacion" label-placement="floating"></ion-input>
+                            </ion-item>
+                            <br>
+                            <br>
+                    </ion-list>
+                    <br>
+                    <ion-button id="btnIngresoOcupacion" expand="block" color="warning">Ingresar</ion-button>
+                    <br><br>
+                </ion-content>
+            </page-filtroporocupacion>
+
+            <!-- fin pantalla-filtroporocupacion-->
+
+            <!-- pantalla-totalsensados -->
+            <page-pantalla-totalsensados class="ion-page" id="pantalla-totalsensados">
+                <ion-header>
+                    <ion-toolbar color="warning">
+                    <ion-buttons slot="start">
+                        <ion-menu-button></ion-menu-button>
+                    </ion-buttons>
+                    <ion-title>Total Censados</ion-title>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content>
+                    <div id="totalCensados">
+                        Acá va el total de personas censadas
+                    </div>
+                    
+                </ion-content>
+            </page-pantalla-totalsensados>
+
+
+            <!-- fin pantalla-totalsensados-->
+        </ion-app>
+
+        <script type="text/javascript" src="js/miCodigo.js"></script>
+    </body>
+</html>
